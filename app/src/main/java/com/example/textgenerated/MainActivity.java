@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -24,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-    Button choose_filebtn, btn_generate;
+    Button choose_filebtn, btn_generate, btn_copy;
     final String LOG_TAG = "myLogs";
     TextView textView;
     EditText editText;
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         }
         choose_filebtn = (Button) findViewById(R.id.btn_choose_file);
         btn_generate=(Button) findViewById(R.id.btn_generate);
+        btn_copy=(Button) findViewById(R.id.btn_copy);
         textView = (TextView) findViewById(R.id.tv_file_path);
         editText = (EditText) findViewById(R.id.edit_message);
         choose_filebtn.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +70,15 @@ public class MainActivity extends AppCompatActivity {
                 chooseFile.setType("*/*");
                 chooseFile = Intent.createChooser(chooseFile, "Choose a file");
                 startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
+            }
+        });
+        btn_copy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = getApplicationContext();
+                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("", editText.getText().toString());
+                clipboard.setPrimaryClip(clip);
             }
         });
 
